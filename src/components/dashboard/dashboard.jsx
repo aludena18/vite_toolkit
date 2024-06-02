@@ -186,7 +186,10 @@ function DashboardContent(props) {
                     />
                   }
                 />
-                <Route path="/rawdata" element={<RawdataRoute />} />
+                <Route
+                  path="/vite_toolkit/rawdata"
+                  element={<RawdataRoute />}
+                />
                 <Route path="/commands" element={<CommandsRoute />} />
                 <Route path="/calculators" element={<CalculatorsRoute />} />
               </Routes>
