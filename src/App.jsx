@@ -15,13 +15,6 @@ function App() {
   return (
     <>
       <Dashboard />
-      <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
-        {/* <Route path="*" element={<NotFound />} /> */}
-        <Route path="/rawdata" element={<RawdataRoute />} />
-        <Route path="/commands" element={<CommandsRoute />} />
-        <Route path="/calculators" element={<CalculatorsRoute />} />
-      </Routes>
     </>
   );
 }

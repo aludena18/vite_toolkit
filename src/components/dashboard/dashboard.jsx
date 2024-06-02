@@ -10,14 +10,20 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
+// import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 // import { mainListItems } from "./listItems";
 import { items } from "./items.jsx";
-import { tabTitle } from "../../helpers/config.jsx";
+import { tabTitle, basename, sections } from "../../helpers/config.jsx";
 
 // import { Outlet, useOutletContext } from "@remix-run/react";
+import { Routes, Route, Link } from "react-router-dom";
+
+import Introduction from "../introduction/introduction.jsx";
+import RawdataRoute from "../../pages/rawdata.jsx";
+import CommandsRoute from "../../pages/commands";
+import CalculatorsRoute from "../../pages/calculators";
 
 function Copyright(props) {
   return (
@@ -169,7 +175,27 @@ function DashboardContent(props) {
           <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
             {/* <Outlet /> */}
             <div>
-              <h1>Hello World! This is my Vite App</h1>
+              <Routes>
+                {/* <Route path="*" element={<NotFound />} /> */}
+                <Route
+                  path={basename}
+                  element={
+                    <Introduction
+                      title={sections.index.title}
+                      description={sections.index.description}
+                    />
+                  }
+                />
+                <Route path={basename + "rawdata"} element={<RawdataRoute />} />
+                <Route
+                  path={basename + "commands"}
+                  element={<CommandsRoute />}
+                />
+                <Route
+                  path={basename + "calculators"}
+                  element={<CalculatorsRoute />}
+                />
+              </Routes>
             </div>
             <Copyright sx={{ pt: 4 }} />
           </Container>
