@@ -3,7 +3,7 @@ import WifiIcon from "@mui/icons-material/Wifi";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import LaptopIcon from "@mui/icons-material/Laptop";
 
-export const basename = "/vite_toolkit/";
+export const basename = "/";
 
 export const sections = {
   index: {
