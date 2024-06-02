@@ -15,7 +15,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 // import { mainListItems } from "./listItems";
 import { items } from "./items.jsx";
-import { tabTitle, basename, sections } from "../../helpers/config.jsx";
+import { tabTitle, sections } from "../../helpers/config.jsx";
 
 // import { Outlet, useOutletContext } from "@remix-run/react";
 import { Routes, Route, Link } from "react-router-dom";
@@ -178,7 +178,7 @@ function DashboardContent(props) {
               <Routes>
                 {/* <Route path="*" element={<NotFound />} /> */}
                 <Route
-                  path={basename}
+                  path="/"
                   element={
                     <Introduction
                       title={sections.index.title}
@@ -186,15 +186,9 @@ function DashboardContent(props) {
                     />
                   }
                 />
-                <Route path={basename + "rawdata"} element={<RawdataRoute />} />
-                <Route
-                  path={basename + "commands"}
-                  element={<CommandsRoute />}
-                />
-                <Route
-                  path={basename + "calculators"}
-                  element={<CalculatorsRoute />}
-                />
+                <Route path="/rawdata" element={<RawdataRoute />} />
+                <Route path="/commands" element={<CommandsRoute />} />
+                <Route path="/calculators" element={<CalculatorsRoute />} />
               </Routes>
             </div>
             <Copyright sx={{ pt: 4 }} />
