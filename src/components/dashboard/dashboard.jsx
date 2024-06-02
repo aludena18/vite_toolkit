@@ -178,7 +178,7 @@ function DashboardContent(props) {
               <Routes>
                 {/* <Route path="*" element={<NotFound />} /> */}
                 <Route
-                  path={basename}
+                  path={"/" + basename}
                   element={
                     <Introduction
                       title={sections.index.title}
