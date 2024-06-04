@@ -187,11 +187,17 @@ function DashboardContent(props) {
                   }
                 />
                 <Route
-                  path="/vite_toolkit/rawdata"
+                  path={sections.rawData.link}
                   element={<RawdataRoute />}
                 />
-                <Route path="/commands" element={<CommandsRoute />} />
-                <Route path="/calculators" element={<CalculatorsRoute />} />
+                <Route
+                  path={sections.commands.link}
+                  element={<CommandsRoute />}
+                />
+                <Route
+                  path={sections.calculators.link}
+                  element={<CalculatorsRoute />}
+                />
               </Routes>
             </div>
             <Copyright sx={{ pt: 4 }} />
