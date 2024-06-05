@@ -22,8 +22,9 @@ import { Routes, Route, Link } from "react-router-dom";
 
 import Introduction from "../introduction/introduction.jsx";
 import RawdataRoute from "../../pages/rawdata.jsx";
-import CommandsRoute from "../../pages/commands";
-import CalculatorsRoute from "../../pages/calculators";
+import CommandsRoute from "../../pages/commands.jsx";
+import CalculatorsRoute from "../../pages/calculators.jsx";
+import NotFound from "../../pages/notfound.jsx";
 
 function Copyright(props) {
   return (
@@ -198,6 +199,7 @@ function DashboardContent(props) {
                   path={sections.calculators.link}
                   element={<CalculatorsRoute />}
                 />
+                <Route component={NotFound} />
               </Routes>
             </div>
             <Copyright sx={{ pt: 4 }} />
