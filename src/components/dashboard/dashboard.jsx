@@ -199,7 +199,7 @@ function DashboardContent(props) {
                   path={sections.calculators.link}
                   element={<CalculatorsRoute />}
                 />
-                <Route component={NotFound} />
+                <Route element={<NotFound />} />
               </Routes>
             </div>
             <Copyright sx={{ pt: 4 }} />
