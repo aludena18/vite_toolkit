@@ -8,6 +8,7 @@ export const sections = {
     title: "Intro",
     description:
       "This is an application with some utilities that you might find useful. It contains a section to filter text files and a second section for generating commands in hexadecimal format for specific types of gps tracker devices.",
+    link: "/",
   },
   rawData: {
     title: "Text Filter",
