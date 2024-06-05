@@ -9,7 +9,4 @@ export default defineConfig({
       // basename: "/vite_toolkit/",
     }),
   ],
-  build: {
-    outDir: "dist", // Ensure this matches your deploy settings
-  },
 });
