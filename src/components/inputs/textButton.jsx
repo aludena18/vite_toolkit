@@ -6,7 +6,7 @@ export default function TextButton(props) {
       color="secondary"
       variant="contained"
       onClick={props.onClick}
-      onSubmit={props.onSubmit}
+      // onSubmit={props.onSubmit}
       sx={{ mx: "auto" }}
     >
       {props.buttonName}

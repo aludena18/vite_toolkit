@@ -1,3 +1,17 @@
+// Return a Hex array from a string
+export const stringToHexArr = function (textString) {
+  return textString.split("").map((char) => char.charCodeAt(0).toString(16));
+};
+
+// Returns a byte array from a Hex string
+export const hexStrTobyteArr = function (hexString) {
+  return hexString
+    .trim()
+    .toLowerCase()
+    .split(" ")
+    .map((el) => parseInt(el, 16));
+};
+
 // Returns a string separating the bytes by one space
 export const stringSpaced = function (str) {
   let dataString = "";

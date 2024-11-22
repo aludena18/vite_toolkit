@@ -4,6 +4,8 @@ import {
   crc16_ccitt,
   crc16_x25,
   fletcherDM,
+  stringToHexArr,
+  hexStrTobyteArr,
 } from "./helpers";
 // import fs from "fs/promises";
 import { devicesList } from "./config";
@@ -29,11 +31,7 @@ export async function getData(file) {
 
 // Teltonika Command
 export const teltonikaCommand = function (commandStr) {
-  const command = [
-    ...commandStr.split("").map((char) => char.charCodeAt(0).toString(16)),
-    "0d",
-    "0a",
-  ];
+  const command = [...stringToHexArr(commandStr), "0d", "0a"];
   const preamble = ["00", "00", "00", "00"];
   const codecId = ["0c"];
   const cmdQ1 = ["01"];
@@ -62,9 +60,7 @@ export const teltonikaCommand = function (commandStr) {
 // Ruptela command
 export const ruptelaCommand = function (commandStr) {
   const commandID = ["6c"];
-  const payload = commandStr
-    .split("")
-    .map((char) => char.charCodeAt(0).toString(16));
+  const payload = stringToHexArr(commandStr);
   const data = [...commandID, ...payload];
   const packetLength = numToFixedSizeArr(data.length, 2);
 
@@ -86,9 +82,7 @@ export const concoxCommand = function (commandStr) {
   const infSerialNumber = ["00", "00"];
   const stop = ["0D", "0A"];
 
-  const commandContent = commandStr
-    .split("")
-    .map((char) => char.charCodeAt(0).toString(16));
+  const commandContent = stringToHexArr(commandStr);
 
   const commandLength = numToFixedSizeArr(
     commandContent.length + serverFlagBit.length,
@@ -124,6 +118,15 @@ export const concoxCommand = function (commandStr) {
   return commandMessage;
 };
 
+// Atrack command
+export const atrackCommand = function (commandStr) {
+  const commandContent = stringToHexArr(commandStr);
+  const commandMessage = [...commandContent, "0D", "0A"]
+    .map((char) => char.toUpperCase())
+    .join(" ");
+  return commandMessage;
+};
+
 // Get command
 export const getCommandHex = function (device, commandStr) {
   switch (+device) {
@@ -136,9 +139,12 @@ export const getCommandHex = function (device, commandStr) {
     case 2:
       // console.log("Concox");
       return concoxCommand(commandStr);
+    case 3:
+      // console.log("Atrack");
+      return atrackCommand(commandStr);
 
     default:
-      return "";
+      return "This is not yet implemented";
   }
 };
 
@@ -147,26 +153,48 @@ export const getDeviceName = function (id) {
   return devicesList[id];
 };
 
-//Get CRC
-export const getCRCHex = function (devId, strArr) {
-  const byteArr = strArr
-    .trim()
-    .toLowerCase()
-    .split(" ")
-    .map((el) => parseInt(el, 16));
+// Returns ascii string from a byte array
+const getAsciifromHexStr = function (input) {
+  const byteArr = hexStrTobyteArr(input);
+  const asciiStr = byteArr.map((el) => String.fromCharCode(el)).join("");
+  return asciiStr;
+};
 
-  let checkSum;
-  if (devId === 0) checkSum = fletcherDM(byteArr);
-  if (devId === 1) checkSum = crc16_ccitt(byteArr);
-  if (devId === 2) checkSum = crc16_ibm(byteArr);
-  if (devId === 3) checkSum = crc16_x25(byteArr);
+const getHexfromAsciiStr = function (input) {
+  const hexArrStr = stringToHexArr(input)
+    .map((el) => el.toString(16))
+    .join(" ")
+    .toUpperCase();
+  return hexArrStr;
+};
 
-  const checkSumArr = numToFixedSizeArr(checkSum);
-
+// Returns a CRC Hex string from a string
+const getCRCHexStr = function (input, func) {
+  const byteArr = hexStrTobyteArr(input);
+  const checkSumArr = numToFixedSizeArr(func(byteArr));
   const checkSumString = checkSumArr
     .map((el) => el.toString(16))
     .join(" ")
     .toUpperCase();
-
   return checkSumString;
+};
+
+// Execute operation
+export const execOp = function (id, input) {
+  switch (id) {
+    case 0:
+      return getCRCHexStr(input, fletcherDM);
+    case 1:
+      return getCRCHexStr(input, crc16_ccitt);
+    case 2:
+      return getCRCHexStr(input, crc16_ibm);
+    case 3:
+      return getCRCHexStr(input, crc16_x25);
+    case 4:
+      return getAsciifromHexStr(input);
+    case 5:
+      return getHexfromAsciiStr(input);
+    default:
+      return "This is not yet implemented";
+  }
 };

@@ -2,7 +2,7 @@
 import { Container, TextField } from "@mui/material";
 import { useState } from "react";
 import TextButton from "./textButton.jsx";
-import BasicSelectMenu, { clearDevice } from "../menu/basicSelectMenu.jsx";
+import BasicSelectMenu, { clearElement } from "../menu/basicSelectMenu.jsx";
 
 export default function CustomCommandForm(props) {
   const TEXTFIELD_COMMAND_LABEL = props.setInputLabel;
@@ -40,7 +40,7 @@ export default function CustomCommandForm(props) {
     // submit(formEl, { replace: true });
     setInput("");
     setDeviceId(-1);
-    clearDevice();
+    clearElement();
     props.setCmd();
   };
 
@@ -50,18 +50,23 @@ export default function CustomCommandForm(props) {
     props.handleInputVal && props.handleInputVal(ev.target.value);
   };
 
-  const handleDeviceId = function (id) {
+  const handleElementId = function (id) {
     setSelectEmptyErr(false);
     setDeviceId(id);
-    props.handleInputMenu && props.handleInputMenu(id);
+    props.handleMenuIndex && props.handleMenuIndex(id);
+  };
+
+  const handleElementName = function (name) {
+    props.handleMenuName && props.handleMenuName(name);
   };
 
   return (
     <Container>
-      <form id="cmd-form" method="" onSubmit={handleSubmit}>
+      <form id="cmd-form" onSubmit={handleSubmit}>
         <BasicSelectMenu
           sx={{ pb: 2, minWidth: 120 }}
-          setDeviceId={handleDeviceId}
+          setElementId={handleElementId}
+          setElementType={handleElementName}
           setDropDownLabel={props.setDropDownLabel}
           setDropDownList={props.setDropDownList}
           selectError={selectEmptyErr}

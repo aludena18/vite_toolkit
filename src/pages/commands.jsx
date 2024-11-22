@@ -14,6 +14,7 @@ export const meta = () => {
 export default function CommandsRoute() {
   const [_input, _setInput] = useState("");
   const [_inMenuItem, _setInMenuItem] = useState(0);
+  const [_inMenuName, _setInMenuName] = useState("");
   const [_result, _setResult] = useState({});
   const [dataToShow, setDataToShow] = useState([]);
 
@@ -32,11 +33,12 @@ export default function CommandsRoute() {
   const processCommand = function (data) {
     const commandStr = data;
     const deviceId = _inMenuItem;
+    const deviceName = _inMenuName;
     const commandHex = getCommandHex(deviceId, commandStr);
 
     const result = [
       { label: "Date", value: new Date().toString() },
-      { label: "Device", value: getDeviceName(+deviceId) },
+      { label: "Device", value: deviceName },
       { label: "Command", value: commandStr },
       { label: "Command (Hex)", value: commandHex },
     ];
@@ -48,12 +50,19 @@ export default function CommandsRoute() {
     processCommand(_input);
   };
 
+  // Set the string that will be process
   const handleInputValue = function (val) {
     _setInput(val);
   };
 
-  const handleInputMenu = function (val) {
-    _setInMenuItem(val);
+  // Set the index of the selected item in the menu
+  const handleMenuIndex = function (id) {
+    _setInMenuItem(id);
+  };
+
+  // Set the name of the selected item in the mennu
+  const handleMenuName = function (name) {
+    _setInMenuName(name);
   };
 
   return (
@@ -76,7 +85,8 @@ export default function CommandsRoute() {
             <SimpleForm
               setCmd={handleSubmit}
               handleInputVal={handleInputValue}
-              handleInputMenu={handleInputMenu}
+              handleMenuIndex={handleMenuIndex}
+              handleMenuName={handleMenuName}
               setDropDownLabel={"Device"}
               setDropDownList={config.devicesList}
               setInputLabel={"Command"}
