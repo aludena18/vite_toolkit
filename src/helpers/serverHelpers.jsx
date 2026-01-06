@@ -57,6 +57,34 @@ export const teltonikaCommand = function (commandStr) {
   return commandMessage;
 };
 
+// Teltonika TC Command
+export const teltonikaFTCCommand = function (commandStr) {
+  const command = [...stringToHexArr(commandStr)];
+  const preamble = ["00", "00", "00", "00"];
+  const codecId = ["0c"];
+  const cmdQ1 = ["01"];
+  const type = ["05"];
+  const cmdSize = numToFixedSizeArr(command.length, 4);
+  const cmdQ2 = ["01"];
+  const data = [
+    ...codecId,
+    ...cmdQ1,
+    ...type,
+    ...cmdSize,
+    ...command,
+    ...cmdQ2,
+  ];
+  const dataSize = numToFixedSizeArr(data.length, 4);
+
+  const dataBytes = data.map((char) => parseInt(char, 16));
+  const crc16 = numToFixedSizeArr(crc16_ibm(dataBytes), 4);
+
+  const commandMessage = [...preamble, ...dataSize, ...data, ...crc16]
+    .map((char) => char.toUpperCase())
+    .join(" ");
+  return commandMessage;
+};
+
 // Ruptela command
 export const ruptelaCommand = function (commandStr) {
   const commandID = ["6c"];
@@ -142,6 +170,9 @@ export const getCommandHex = function (device, commandStr) {
     case 3:
       // console.log("Atrack");
       return atrackCommand(commandStr);
+    case 4:
+      // console.log("Teltonika FTC");
+      return teltonikaFTCCommand(commandStr);
 
     default:
       return "This is not yet implemented";

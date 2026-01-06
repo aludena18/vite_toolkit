@@ -17,16 +17,19 @@ export default function DropzoneForm(props) {
   const BUTTON_NAME = "FILTER & SAVE";
   const FILTER_WORD_HELPER_TEXT = "Entry required.";
   const CHECKBOX_LABEL = "Only content after the keyword";
+  const CHECKBOX_TIME_LABEL = "Include Time";
+  const THIRD_FILTER = true; // just for testing
   const [renderFiles, setRenderFiles] = useState(false);
   const [inputError, setInputError] = useState(false);
   const [check, setCheck] = useState(false);
+  const [timeCheck, setTimeCheck] = useState(false);
   const [filesArr, setFilesArr] = useState([]);
   const [filterWord, setFilterWord] = useState("");
   // const submit = useSubmit();
 
   const onDrop = useCallback((acceptedFiles) => {
-    console.log("a file has been drooped");
-    console.log(acceptedFiles);
+    // console.log("a file has been drooped");
+    // console.log(acceptedFiles);
 
     const filesData = [];
     acceptedFiles.forEach((file) => {
@@ -72,20 +75,43 @@ export default function DropzoneForm(props) {
       return;
     }
     const filesDataFiltered = filesArr.map((fileData) => {
+      // Split the text by rows
       const firstFilter = fileData.content
         .split(/\r\n|\n/)
         .filter((frame) => frame.includes(filterWord));
 
+      //for testing
       const secondFilter = check
+        ? firstFilter
+            .map((line) => {
+              const splitLine = line.split(filterWord);
+              return timeCheck
+                ? [splitLine[0].split("|")[0], splitLine[1]].join("| ")
+                : splitLine[1];
+            })
+            .join("\r\n")
+        : [];
+
+      // Filter the rows only after the keyword
+      const _secondFilter = check
         ? firstFilter.map((line) => line.split(filterWord)[1]).join("\r\n")
         : [];
+
+      // Assigning the array to return
       const contentFiltered = check ? secondFilter : firstFilter.join("\r\n");
+
+      //for testing
+      console.log(contentFiltered);
+
+      //
+
       return { name: fileData.name, content: contentFiltered };
     });
     //console.log(filesDataFiltered.length, " files filtered");
 
     setFilterWord("");
     setCheck(false);
+    setTimeCheck(false);
     setRenderFiles(false);
     props.handleSetDataFiltered(filesDataFiltered);
   };
@@ -97,6 +123,10 @@ export default function DropzoneForm(props) {
 
   const handleOnChangeCheck = function (ev) {
     setCheck((st) => !st);
+  };
+
+  const handleOnChangeTimeCheck = function (ev) {
+    setTimeCheck((st) => !st);
   };
 
   const dropzoneStyle = {
@@ -143,6 +173,15 @@ export default function DropzoneForm(props) {
             onChange={handleOnChangeCheck}
             control={<Checkbox checked={check} />}
             label={CHECKBOX_LABEL}
+          />
+        </FormGroup>
+
+        {/* Input - Checkbox */}
+        <FormGroup>
+          <FormControlLabel
+            onChange={handleOnChangeTimeCheck}
+            control={<Checkbox checked={timeCheck} />}
+            label={CHECKBOX_TIME_LABEL}
           />
         </FormGroup>
 

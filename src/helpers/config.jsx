@@ -75,6 +75,10 @@ export const devicesList = [
     id: 0,
     type: "Teltonika",
   },
+  {
+    id: 4,
+    type: "Teltonika FTC",
+  },
 ];
 
 // List of calculators for the basicSelectMenu component
